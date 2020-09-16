@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>login</title>
+        <link rel="stylesheet" href="./assets/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <script>
+            function onLogin(e){
+                e.preventDafault();
+                window.location = './home.html'
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <img class="icon-img" src="./assets/images/icon.svg">
+                <div class="message">Pelase log in with your account</div>
+            </div>
+            <div class="switch">
+                <button class="btn first">Customer</button><button class="btn second">Seller</button>
+            </div>
+            <form method="POST" onsubmit="onLogin(event)" class="auth" action="">
+                <div class="input-wrapper">
+                    <input type="text" name="username" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="forgot-pass">
+                    <a href="#">Forgot password?</a>
+                </div>
+                <button onclick="window.location='./home.html'" class="btn" href="">PRIMARY</button>
+            </form>
+            <div class="register-link">
+                <span class="asking-text">Don't have Blanja account? </span><a href="signup.html">Register</a>
+            </div>
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,1 @@
+const waktuMulai = new Date('2020-08-17T')
