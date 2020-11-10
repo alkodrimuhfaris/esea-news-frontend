@@ -23,12 +23,6 @@ function Header() {
           <View style={headerStyles.bellContainer}>
             <FontAwesomeIcon icon={faBell} color={'white'} size={28} regular />
           </View>
-          <FontAwesomeIcon
-            icon={faCircle}
-            color={'#7C4935'}
-            size={10}
-            style={headerStyles.notifDot}
-          />
         </View>
       </TouchableOpacity>
     </View>
@@ -38,16 +32,13 @@ function Header() {
 const headerStyles = StyleSheet.create({
   headerParent: {
     position: 'relative',
-    backgroundColor: '#22221D',
+    backgroundColor: '#084F6C',
     width: '100%',
-    height: 196,
+    height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headerImage: {
-    width: '20%',
-    height: '20$',
-    aspectRatio: 1,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
   headerTitle: {
     color: 'white',

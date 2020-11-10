@@ -24,7 +24,7 @@ export default function Article() {
       </View>
       <View style={styles.detailWrap}>
         <Text style={styles.detail}>Author: {'author'}</Text>
-        <Text style={styles.detail}>Posted on: {'2020-11-10'}</Text> 
+        <Text style={styles.detail}>Posted on: {'2020-11-10'}</Text>
       </View>
       <Image
         source={{
