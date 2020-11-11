@@ -5,21 +5,23 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Image,
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
 import Header from '../components/Header';
 import CardNews from '../components/CardNews';
-import CardCategory from '../components/CardCategory';
 
-export default function Home() {
+export default function SearchResult() {
+  const [query, setQuery] = useState('Resep');
+
   return (
     <SafeAreaView style={styles.parent}>
       <ScrollView vertical style={styles.container}>
-        <Header />
+        <Header title={'Search Result'} />
         <View style={styles.headingWrapper}>
-          <Text style={styles.heading}>Fresh news for you</Text>
+          <Text style={styles.heading} numberOfLines={2}>
+            {'Result search for: ' + query}
+          </Text>
         </View>
         {[...Array(5)].map((_item, index) => (
           <TouchableOpacity
@@ -28,20 +30,6 @@ export default function Home() {
             <CardNews />
           </TouchableOpacity>
         ))}
-        <View style={styles.headingWrapper}>
-          <Text style={styles.heading}>Categories</Text>
-        </View>
-        <ScrollView horizontal style={styles.categorySlide}>
-          {[...Array(5)].map((_item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={
-                index === 0 ? styles.extraLeftMargin : styles.casualMargin
-              }>
-              <CardCategory />
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -64,13 +52,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-  extraLeftMargin: {
+  noLeftMargin: {
     alignItems: 'center',
-    marginLeft: 5,
     marginRight: 5,
   },
-  casualMargin: {
+  leftMargin: {
     alignItems: 'center',
+    marginLeft: 5,
     marginRight: 5,
   },
   headingWrapper: {

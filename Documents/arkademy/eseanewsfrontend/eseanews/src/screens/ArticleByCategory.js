@@ -1,47 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView,
-  Image,
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
 import Header from '../components/Header';
 import CardNews from '../components/CardNews';
-import CardCategory from '../components/CardCategory';
 
-export default function Home() {
+export default function SearchResult() {
+  const [category, setCategory] = useState('Environment');
+
   return (
     <SafeAreaView style={styles.parent}>
       <ScrollView vertical style={styles.container}>
-        <Header />
-        <View style={styles.headingWrapper}>
-          <Text style={styles.heading}>Fresh news for you</Text>
-        </View>
-        {[...Array(5)].map((_item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={index === 0 ? styles.noTopMargin : styles.topMargin}>
-            <CardNews />
-          </TouchableOpacity>
-        ))}
-        <View style={styles.headingWrapper}>
-          <Text style={styles.heading}>Categories</Text>
-        </View>
-        <ScrollView horizontal style={styles.categorySlide}>
+        <Header
+          title={category}
+          category={category}
+          img={
+            'http://52.200.32.180:8800/Uploads/1-categoryPicture-1604820599024.jpg'
+          }
+        />
+        <View style={styles.articlesInCategory}>
           {[...Array(5)].map((_item, index) => (
             <TouchableOpacity
               key={index}
-              style={
-                index === 0 ? styles.extraLeftMargin : styles.casualMargin
-              }>
-              <CardCategory />
+              style={index === 0 ? styles.noTopMargin : styles.topMargin}>
+              <CardNews />
             </TouchableOpacity>
           ))}
-        </ScrollView>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -55,6 +45,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFFFF',
     zIndex: 1,
   },
+  articlesInCategory: {
+    marginTop: 50,
+    marginBottom: 50,
+  },
   noTopMargin: {
     alignItems: 'center',
     marginBottom: 10,
@@ -64,20 +58,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-  extraLeftMargin: {
+  noLeftMargin: {
     alignItems: 'center',
-    marginLeft: 5,
     marginRight: 5,
   },
-  casualMargin: {
+  leftMargin: {
     alignItems: 'center',
+    marginLeft: 5,
     marginRight: 5,
   },
   headingWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
   },
   heading: {
     width: '70%',
@@ -85,6 +77,8 @@ const styles = StyleSheet.create({
     color: '#102526',
     fontWeight: 'bold',
     textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
   saveBtn: {
     flexDirection: 'row',
@@ -98,7 +92,19 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'relative',
   },
-  categorySlide: {
-    marginBottom: 30,
+  image: {
+    width: 75,
+    height: 75,
+    borderRadius: 50,
+    zIndex: 1,
+  },
+  title: {
+    width: '70%',
+    textAlign: 'center',
+    fontSize: 12,
+    marginTop: 5,
+    marginBottom: 5,
+    color: '#102526',
+    fontWeight: 'bold',
   },
 });
