@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -9,113 +9,60 @@ import {
 } from 'react-native';
 import {Form, Button, Label, Textarea} from 'native-base';
 import Comment from '../components/Comment';
+import axios from 'axios';
+import moment from 'moment';
 
-export default function Article() {
+export default function Article({route}) {
+  const {id} = route.params;
   const [comment, setComment] = useState('');
+  const [data, setData] = useState({});
+
   const sendComment = () => {
     console.log(comment);
   };
+
+  const getData = async () => {
+    const {data} = await axios.get(
+      'http://52.200.32.180:8800/public/article/read/' + id,
+    );
+    setData(data.article);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <View style={styles.parent}>
       <ScrollView vertical style={styles.container}>
         <View style={styles.wrap}>
           <Text style={styles.title}>
-            Ikan Sapu-Sapu Mati Indikasi Beratnya Pencemaran di Kali Cileungsi
+            {Object.keys(data).length && data.title}
           </Text>
         </View>
         <View style={styles.detailWrap}>
-          <Text style={styles.detail}>Author: {'author'}</Text>
-          <Text style={styles.detail}>Posted on: {'2020-11-10'}</Text>
+          <Text style={styles.detail}>
+            Author: {Object.keys(data).length && data.Author.name}
+          </Text>
+          <Text style={styles.detail}>
+            Posted on: 
+            {Object.keys(data).length &&
+              moment(data.createdAt).format(' MMM Do, YYYY')}
+          </Text>
         </View>
         <Image
           source={{
-            uri:
-              'http://52.200.32.180:8800/Uploads/4-picture-1604837018384.jpg',
+            uri: Object.keys(data).length
+              ? 'http://52.200.32.180:8800/' + data.picture
+              : 'https://www.brownweinraub.com/wp-content/uploads/2017/09/placeholder.jpg',
           }}
           style={styles.picture}
         />
         <Text style={styles.caption}>
-          Gambar: {'Biota sungai mati akibat pencemaran di Sungai Cileungsi'}.
+          Gambar: {Object.keys(data).length && data.caption}.
         </Text>
         <Text style={styles.article}>
-          Kepala Perwakilan Ombudsman RI Perwakilan Jakarta Raya Teguh P Nugroho
-          menemukan hal tersebut ketika melakukan sidak ke beberapa titik
-          terkait pencemaran Sungai Cileungsi. Sidak ini merupakan bagian dari
-          proses monitoring tindakan korektif Laporan Akhir Hasil Pemeriksaan
-          (LAHP) Pencemaran Sungai Cileungsi awal tahun 2019 yang lalu. Sidak
-          tersebut dilakukan di beberapa titik yang ditengarai sebagai awal mula
-          terjadinya pencemaran yaitu Jembatan Wika, Jembatan Narogong di
-          wilayah perbatasan Kabupaten Bogor dan Kota Bekasi, serta Jembatan
-          Pocong. “Di titik terakhir kami menemukan ratusan ikan sapu-sapu mati
-          di satu titik saja. Selain itu, air Sungai Cileungsi menghitam, berbau
-          dan berbusa. Ikan sapu-sapu yang biasanya cukup tahan dengan polutan
-          dari limbah domestik, ini bisa menjadi indikasi beratnya pencemaran
-          yang terjadi di Sungai Cileungsi dan ditengarai berasal dari limbah
-          kimia yang dihasilkan pabrik-pabrik di wilayah tersebut," ujarnya
-          dalam keterangan resmi yang diterima Bisnis, Rabu (28/8/2019). “Untuk
-          memastikan tingkat pencemaran Sungai Cileungsi, kami akan meminta data
-          pemeriksaan kondisi air terakhir dari DLH Kabupaten Bogor dan DLH Kota
-          Bekasi, serta mengecek keakuratan hasil pemeriksaan tersebut ke
-          Laboratorium yang melakukan pengecekan," tambah Teguh. Selain
-          melakukan pemeriksaan di sungai, Teguh dan jajarannya melakukan
-          pemeriksaan terhadap dua IPAl (Instalasi Pengolahan Air Limbah) di dua
-          perusahaan yang menurut DLH Kabupaten Bogor telah mengalami perubahan
-          sejak LAHP Ombudsman Jakarta Raya diberikan. “Kami menemukan, adanya
-          ketidaksesuaian standar paling minimum dalam proses pengolahan limbah
-          di salah satu perusahaan yang kami datangi," sambungnya. Temuan
-          Ombudsman, misalnya menunjukan pengolahan limbah B3 padat yang
-          dibiarkan berserakan di gedung pabrik yang diperiksa, ada kebocoran di
-          IPAL, dan tidak tersedianya informasi hasil pemeriksaan limbah
-          terakhir. Tahun lalu, Ombudsman Jakarta Raya menemukan 54 perusahaan
-          yang bermasalah dengan perizinan khususnya terkait pembuangan limbah
-          di sepanjang Sungai Cileungsi. Sebagai tindakan korektif, DLH
-          Kabupaten Bogor kemudian membenahi pengawasan perizinan IPAL
-          perusahaan-perusahaan tersebut, 17 di antaranya dinyatakan sudah clean
-          and clear. “Namun saat kami melakukan pengecekan kemarin, jelas kami
-          menemukan adanya pertidaksesuaian antara dokumen clean and clear DLH
-          kabupaten Bogor dengan fakta di lapangan” tutur Teguh. Berdasarkan
-          temuan di lapangan tersebut, Teguh beranggapan DLH Kabupaten Bogor
-          sudah tidak mampu menangani masalah pencemaran Sungai Cileungsi
-          tersebut. “Selain temuan di lapangan, kami juga menemukan fakta bahwa
-          para pelaku kejahatan lingkungan tahun sebelumnya yang diajukan ke
-          proses hukum hanya dijerat dengan Perda, tidak dengan Undang-Undang No
-          32 tahun 2009 tentang Perlindungan dan Pengelolaan Lingkungan Hidup,”
-          tegas Teguh. Kejahatan lingkungan berat seharusnya dijerat dengan
-          pasal 1 angka 14 Undang-Undang No. 32 tahun 2009 tentang Perlindungan
-          dan Pengelolaan Lingkungan Hidup dengan ancaman maksimal penjara tiga
-          tahun dan denda Rp3 miliar. Selain perusahaan pencemar lingkungan yang
-          akan ditindak, pengawas lingkungan hidup yang lalai melaksanakan tugas
-          juga bisa dijerat pasal Pidana dalam Undang-undang yang sama. Menurut
-          Teguh, maladminitrasi dalam pengawasan lingkungan implikasinya pidana,
-          bukan hanya tindakan korektif. Sebab, dalam undang-undang dijelaskan
-          kelalaian lembaga pengawas lingkungan hidup juga merupakan tindak
-          pidana. Namun, nyatanya dalam kasus ini, pelaku kejahatan lingkungan
-          hanya dikenai Tindak Pidana Ringan (Tipiring) dengan hukuman berupa
-          denda sebesar Rp15 juta. “Melihat dampak kerugian yang ditimbulkan
-          akibat pencemaran Sungai Cileungsi ini, tidak hanya kematian biota
-          Sungai Cileungsi, tapi juga bau menyengat yang harus ‘dinikmati’ warga
-          di sepanjang jalur Sungai Cileungsi," ungkap Teguh lagi. Terlebih,
-          akibat hal ini PDAM Tirta Patriot Kota Bekasi tidak dapat menjadikan
-          air baku Sungai Cileungsi, yang saat melintasi Kota Bekasi menjadi
-          Sungai Bekasi, sebagai bahan baku air minum lagi. Sehingga pelayanan
-          publik terhadap penyediaan air bersih bagi warga Kota Bekasi
-          terganggu. Berdasarkan kondisi tersebut, Ombudsman Jakarta Raya akan
-          menindaklanjuti LAHP yang telah disampaiakan sebelumnya. Dalam LAHP
-          tersebut dinyatakan jika DLH Kabupaten Bogor tidak mampu menjadi
-          leading sector penangan pencemaran sungai Cileungsi, penanganannya
-          akan dialihkan ke DLH dan jajaran Pemrov Jabar. "Kami akan melakukan
-          pemanggilan kepada DLH Kabupaten Bogor, DLH Provinsi Jabar, dan Ditjen
-          Gakkum KLHK untuk menindaklanjuti ini. Jika diperlukan, kami akan
-          meminta kesiapan dari Gubernur Jabar terkait dengan penanganan
-          pencemaran ini, karena ini sudah lintas Kabupaten/Kota,” tegas Teguh.
-          Selain pemanggilan pihak-pihak tersebut, Ombudsman Jakarta Raya juga
-          akan meminta keterangan dari DLH Kota Bekasi sebagai penanggung jawab
-          tata kelola Sungai Cileungsi di hilir dan PDAM Tirta Patriot selaku
-          pemberi layanan air bersih di Kota Bekasi. Ombudsman juga akan
-          berkoordinasi dengan Mabes Polri dan Polda Jabar terkait penindakan
-          para pelaku kejahatan lingkungan secara lebih tegas dengan UU
-          No.39/2009.
+          {Object.keys(data).length && data.article}
         </Text>
 
         <View style={styles.authorWrapper}>

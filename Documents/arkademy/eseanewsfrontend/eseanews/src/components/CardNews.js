@@ -1,28 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Image} from 'react-native';
 
-export default function CardNews() {
+export default function CardNews({data}) {
+  const {item} = data;
   return (
     <View style={cardStyle.parent}>
       <Text ellipsizeMode="tail" numberOfLines={2} style={cardStyle.title}>
-        Resep Ikan Mas Cobek Pedas, Lezat Menggugah Selera
+        {item.title}
       </Text>
       <Image
         source={{
-          uri: 'http://52.200.32.180:8800/Uploads/4-picture-1604821675842.jpg',
+          uri: 'http://52.200.32.180:8800/' + item.picture,
         }}
         style={cardStyle.image}
       />
-      <View style={cardStyle.bellowImgWrap}>
-        <Text ellipsizeMode="tail" numberOfLines={2} style={cardStyle.caption}>
-          Masak hidangan ikan bisa menjadi pilihan menu sehat yang juga lezat.
-          Anda bisa mencoba mencoba berkreasi dengan ikan mas. Anda bisa membuat
-          hidangan ikan mas dengan bumbu rempah-rempah. Hmm...membayangkannya
-          saja sudah terasa sedap. Sudah tidak sabar ingin masak ikan mas cobek
-          pedas?
-        </Text>
-      </View>
     </View>
   );
 }
@@ -31,9 +23,9 @@ const cardStyle = StyleSheet.create({
   parent: {
     width: '90%',
     height: 'auto',
-    alignItems: 'center',
     borderRadius: 10,
     elevation: 3,
+    marginVertical: 10,
   },
   relativeParent: {
     position: 'relative',

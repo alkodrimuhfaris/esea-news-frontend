@@ -11,63 +11,9 @@ import {Input} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faBell, faCircle, faSearch} from '@fortawesome/free-solid-svg-icons';
 import homePhotos from '../assets/photos/homePhotos.jpg';
-
-function Notif({
-  notifHeader = 'New notif',
-  notifImg = 'http://52.200.32.180:8080/Uploads/2-product_image-1603966940378.jpg',
-  notifBody = 'from where you are',
-}) {
-  return (
-    <View style={notifStyle.commentWrap}>
-      <View style={notifStyle.profPicWrapper}>
-        <Image source={{uri: notifImg}} style={notifStyle.profPic} />
-      </View>
-      <View style={notifStyle.textWrap}>
-        <TouchableOpacity>
-          <Text style={notifStyle.header} numberOfLines={1}>
-            {notifHeader}
-          </Text>
-          <Text style={notifStyle.body} numberOfLines={2}>
-            {notifBody}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
-
-const notifStyle = StyleSheet.create({
-  commentWrap: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  profPic: {
-    height: 20,
-    width: 20,
-    borderRadius: 20,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  profPicWrapper: {
-    width: 30,
-  },
-  textWrap: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    padding: 5,
-  },
-  header: {
-    marginBottom: 3,
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#1F271B',
-  },
-  body: {
-    fontSize: 14,
-    color: '#1F271B',
-  },
-});
+import {useNavigation} from '@react-navigation/native';
+import Notif from './Notif';
+import {useSelector} from 'react-redux';
 
 export default function Header({
   title = 'eSea Home',
@@ -77,6 +23,13 @@ export default function Header({
   const [openNotif, setOpenNotif] = useState(false);
   const [search, setSearch] = useState('');
   const [clickSearch, setClickSearch] = useState(false);
+  const navigation = useNavigation();
+
+  const isLogin = useSelector((state) => state.auth.isLogin);
+
+  const goLogin = () => {
+    navigation.navigate('HomeStack');
+  };
 
   return (
     <View style={headerStyles.headerParent}>
@@ -151,18 +104,31 @@ export default function Header({
             : `Search for: ${search}`}
         </Text>
       )}
-      <TouchableOpacity
-        onPress={() => setOpenNotif(!openNotif)}
-        style={headerStyles.notifContainer}>
-        <View style={headerStyles.notifWrapper}>
-          <View style={headerStyles.bellContainer}>
-            <FontAwesomeIcon icon={faBell} color={'white'} size={28} regular />
+      {isLogin ? (
+        <TouchableOpacity
+          onPress={() => setOpenNotif(!openNotif)}
+          style={headerStyles.notifContainer}>
+          <View style={headerStyles.notifWrapper}>
+            <View style={headerStyles.bellContainer}>
+              <FontAwesomeIcon
+                icon={faBell}
+                color={'white'}
+                size={28}
+                regular
+              />
+            </View>
+            <View style={headerStyles.notifDot}>
+              <FontAwesomeIcon icon={faCircle} color={'red'} size={8} regular />
+            </View>
           </View>
-          <View style={headerStyles.notifDot}>
-            <FontAwesomeIcon icon={faCircle} color={'red'} size={8} regular />
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => goLogin()}
+          style={!clickSearch ? headerStyles.login : headerStyles.loginBottom}>
+          <Text style={headerStyles.loginTxt}>Login</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -179,6 +145,29 @@ const headerStyles = StyleSheet.create({
     borderBottomRightRadius: 15,
     zIndex: 2,
     overflow: 'visible',
+  },
+  login: {
+    position: 'absolute',
+    top: 15,
+    right: 12,
+    padding: 5,
+    borderRadius: 8,
+    zIndex: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  loginBottom: {
+    position: 'absolute',
+    top: 100,
+    right: 12,
+    padding: 5,
+    borderRadius: 8,
+    zIndex: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  loginTxt: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   imageParent: {
     position: 'absolute',
@@ -286,7 +275,7 @@ const headerStyles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 16,
-    width: '70%',
+    width: '60%',
     zIndex: 3,
   },
   notifContainer: {

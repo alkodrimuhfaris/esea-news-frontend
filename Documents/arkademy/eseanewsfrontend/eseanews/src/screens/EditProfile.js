@@ -7,10 +7,15 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Modal,
+  TouchableHighlight,
+  Alert,
 } from 'react-native';
 import {Input, Form, Item, DatePicker, Button, Label} from 'native-base';
-import RadioButton from './src/components/RadioButton';
-import Toggle from './src/components/Toggle';
+import RadioButton from '../components/RadioButton';
+import Toggle from '../components/Toggle';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faCamera} from '@fortawesome/free-solid-svg-icons';
 
 export default function ChangeProfile() {
   const [name, setName] = useState('');
@@ -27,6 +32,10 @@ export default function ChangeProfile() {
     setNotifArticle((previousState) => !previousState);
   const [notifEvent, setNotifEvent] = useState(false);
   const toggleEvent = () => setNotifEvent((previousState) => !previousState);
+
+  const [avatar, setAvatar] = useState('');
+
+  const [modal, setModal] = useState(false);
 
   const genders = ['Male', 'Female'];
 
@@ -65,7 +74,7 @@ export default function ChangeProfile() {
 
         <Text style={styles.subTitle}>Personal Information</Text>
         <View style={styles.profilePicCont}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModal(!modal)}>
             <Image
               source={{
                 uri:
@@ -75,6 +84,22 @@ export default function ChangeProfile() {
             />
           </TouchableOpacity>
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <TouchableHighlight
+            style={{...styles.openButton, backgroundColor: '#2196F3'}}
+            onPress={() => {
+              setModal(!modal);
+            }}>
+            <Text style={styles.textStyle}>Hide Modal</Text>
+          </TouchableHighlight>
+        </Modal>
 
         <View style={styles.secondary}>
           <Item floatingLabel style={styles.floatingLbl}>
@@ -205,6 +230,53 @@ export default function ChangeProfile() {
 }
 
 const styles = StyleSheet.create({
+  addPictureIcon: {
+    height: 30,
+    width: 30,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    position: 'absolute',
+    left: 65,
+    top: 75,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
   container: {
     position: 'relative',
     paddingLeft: '5%',

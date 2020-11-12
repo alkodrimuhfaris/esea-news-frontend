@@ -10,11 +10,20 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {Input, Card, Form, Item, Button, Label, Textarea} from 'native-base';
-import logo from './src/assets/icons/esea.png';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPencilAlt, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import LoginFirst from '../components/LoginFirst';
 
 function Header() {
+  const navigation = useNavigation();
+
+  const changeProfile = () => {
+    navigation.navigate('EditProfile');
+    console.log('change profile');
+  };
+
   return (
     <View style={headerStyles.headerParent}>
       <Text style={headerStyles.name}>M Faris Alkodri</Text>
@@ -28,7 +37,9 @@ function Header() {
           style={headerStyles.profilePic}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={headerStyles.notifContainer}>
+      <TouchableOpacity
+        onPress={changeProfile}
+        style={headerStyles.notifContainer}>
         <View style={headerStyles.notifWrapper}>
           <View style={headerStyles.bellContainer}>
             <FontAwesomeIcon
@@ -165,18 +176,24 @@ const optStyle = StyleSheet.create({
 
 export default function Home() {
   const items = arrayOpt();
+  const token = useSelector((state) => state.auth.token);
+
   return (
     <SafeAreaView style={styles.parent}>
-      <ScrollView vertical style={styles.container}>
-        <Header style={styles.header} />
-        <View style={styles.header}>
-          {items.map((item, index) => (
-            <TouchableOpacity key={index}>
-              <ProfileOpt item={item} />
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+      {!token ? (
+        <ScrollView vertical style={styles.container}>
+          <Header style={styles.header} />
+          <View style={styles.header}>
+            {items.map((item, index) => (
+              <TouchableOpacity key={index}>
+                <ProfileOpt item={item} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      ) : (
+        <LoginFirst />
+      )}
     </SafeAreaView>
   );
 }

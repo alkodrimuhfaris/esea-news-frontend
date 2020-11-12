@@ -2,6 +2,9 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import {Form, Button, Label, Textarea} from 'native-base';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import LoginFirst from '../components/LoginFirst';
 
 export default function ChangeProfile() {
   const [title, setTitle] = useState('');
@@ -9,6 +12,10 @@ export default function ChangeProfile() {
   const [picture, setPicture] = useState('');
   const [article, setArticle] = useState('');
 
+  const navigation = useNavigation();
+
+  const token = useSelector((state) => state.auth.token);
+  
   useEffect(() => {
     console.log(title);
     console.log(caption);
@@ -16,75 +23,85 @@ export default function ChangeProfile() {
   }, [title, caption, article]);
 
   return (
-    <View style={styles.parent}>
-      <View style={styles.groupBtn}>
-        <Button style={styles.btnOutline}>
-          <Text style={styles.btnTxtOutline}>DISCARD</Text>
-        </Button>
+    <View style={styles.main}>
+      {!token ? (
+        <View style={styles.parent}>
+          <View style={styles.groupBtn}>
+            <Button style={styles.btnOutline}>
+              <Text style={styles.btnTxtOutline}>DISCARD</Text>
+            </Button>
 
-        <View style={styles.saveGroup}>
-          <Button style={styles.btnSave}>
-            <Text style={styles.btnTxtSave}>SAVE TO DRAFT</Text>
-          </Button>
+            <View style={styles.saveGroup}>
+              <Button style={styles.btnSave}>
+                <Text style={styles.btnTxtSave}>SAVE TO DRAFT</Text>
+              </Button>
 
-          <Button style={styles.btn}>
-            <Text style={styles.btnTxt}>PUBLISH</Text>
-          </Button>
+              <Button style={styles.btn}>
+                <Text style={styles.btnTxt}>PUBLISH</Text>
+              </Button>
+            </View>
+          </View>
+
+          <Form style={styles.formWrapper}>
+            <ScrollView style={styles.wrapper}>
+              <View style={[styles.form, styles.title]}>
+                <Label style={styles.labelTxt}>Title</Label>
+                <Textarea
+                  placeholder="Write your title here"
+                  onChangeText={(e) => setTitle(e)}
+                  style={styles.input}
+                  value={title}
+                  block
+                />
+              </View>
+
+              <View style={[styles.form, styles.article]}>
+                <Label style={styles.labelTxt}>Article</Label>
+                <Textarea
+                  placeholder="Write your article here"
+                  onChangeText={(e) => setArticle(e)}
+                  style={styles.input}
+                  value={article}
+                  block
+                />
+              </View>
+
+              <View style={[styles.form, styles.picture]}>
+                <Label style={styles.labelTxt}>Picture</Label>
+                <Textarea
+                  placeholder="Write your picture here"
+                  onChangeText={(e) => setPicture(e)}
+                  style={styles.input}
+                  value={picture}
+                  block
+                />
+              </View>
+
+              <View style={[styles.form, styles.caption]}>
+                <Label style={styles.labelTxt}>Caption</Label>
+                <Textarea
+                  placeholder="Write your picture's caption here"
+                  onChangeText={(e) => setCaption(e)}
+                  style={styles.input}
+                  value={caption}
+                  block
+                />
+              </View>
+            </ScrollView>
+          </Form>
         </View>
-      </View>
-
-      <Form style={styles.formWrapper}>
-        <ScrollView style={styles.wrapper}>
-          <View style={[styles.form, styles.title]}>
-            <Label style={styles.labelTxt}>Title</Label>
-            <Textarea
-              placeholder="Write your title here"
-              onChangeText={(e) => setTitle(e)}
-              style={styles.input}
-              value={title}
-              block
-            />
-          </View>
-
-          <View style={[styles.form, styles.article]}>
-            <Label style={styles.labelTxt}>Article</Label>
-            <Textarea
-              placeholder="Write your article here"
-              onChangeText={(e) => setArticle(e)}
-              style={styles.input}
-              value={article}
-              block
-            />
-          </View>
-
-          <View style={[styles.form, styles.picture]}>
-            <Label style={styles.labelTxt}>Picture</Label>
-            <Textarea
-              placeholder="Write your picture here"
-              onChangeText={(e) => setPicture(e)}
-              style={styles.input}
-              value={picture}
-              block
-            />
-          </View>
-
-          <View style={[styles.form, styles.caption]}>
-            <Label style={styles.labelTxt}>Caption</Label>
-            <Textarea
-              placeholder="Write your picture's caption here"
-              onChangeText={(e) => setCaption(e)}
-              style={styles.input}
-              value={caption}
-              block
-            />
-          </View>
-        </ScrollView>
-      </Form>
+      ) : (
+        <LoginFirst />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  main: {
+    width: '100%',
+    flex: 1,
+  },
   parent: {
     flex: 1,
     alignItems: 'center',

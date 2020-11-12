@@ -1,23 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, Alert, ScrollView} from 'react-native';
 import {Input, Form, Item, Button, Label} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faLongArrowAltRight} from '@fortawesome/free-solid-svg-icons';
+import authAction from '../redux/actions/auth';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
-export default function ChangeProfile() {
+export default function ChangeProfile(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const token = useSelector((state) => state.auth.token);
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  const navigation = useNavigation();
 
   useEffect(() => {
     console.log(email);
     console.log(password);
   }, [email, password]);
 
+  const login = () => {
+    authAction.login({email, password});
+    console.log(token);
+    navigation.navigate('HomeStack');
+  };
+
   return (
     <View style={styles.parent}>
       <View style={styles.wrapper}>
-        <Text style={styles.title}>Login</Text>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>eSea</Text>
+          <Text style={styles.titleSmall}>Login</Text>
+        </View>
 
         <ScrollView style={styles.scroll}>
           <Form style={styles.container}>
@@ -52,7 +67,7 @@ export default function ChangeProfile() {
           <FontAwesomeIcon icon={faLongArrowAltRight} color={'#F26487'} />
         </View>
 
-        <Button style={styles.btn} block>
+        <Button onPress={login} style={styles.btn} block>
           <Text style={styles.btnTxt} block>
             LOGIN
           </Text>
@@ -104,13 +119,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#F26487',
   },
-  title: {
+  titleWrapper: {
+    flexDirection: 'row',
     marginLeft: 20,
+    marginTop: 50,
+    marginBottom: 10,
+  },
+  title: {
     fontSize: 34,
     color: '#145C9E',
     fontWeight: 'bold',
-    marginTop: 50,
-    marginBottom: 10,
+    marginRight: 12,
+  },
+  titleSmall: {
+    fontSize: 34,
+    color: '#145C9E',
+    marginRight: 5,
   },
   forgotWrapper: {
     flexDirection: 'row',
